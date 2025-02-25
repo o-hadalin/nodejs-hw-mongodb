@@ -15,6 +15,8 @@ const setupServer = () => {
 
   app.get('/contacts', contactController.getContacts);
 
+  app.get('/contacts/:contactId', contactController.getContactById);
+
   app.get('/', (req, res) => {
     res.json({ message: 'Hello world!' });
   });
