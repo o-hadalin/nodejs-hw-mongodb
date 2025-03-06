@@ -59,4 +59,33 @@ const createContact = async (req, res, next) => {
   }
 };
 
-export default { getContacts, getContactById, createContact };
+const patchContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const { name, phoneNumber, email, isFavourite, contactType } = req.body;
+
+    const contact = await contactsService.getContactById(contactId);
+
+    if (!contact) {
+      return next(createError(404, 'Contact not found'));
+    }
+
+    if (name) contact.name = name;
+    if (phoneNumber) contact.phoneNumber = phoneNumber;
+    if (email) contact.email = email;
+    if (isFavourite !== undefined) contact.isFavourite = isFavourite;
+    if (contactType) contact.contactType = contactType;
+
+    await contact.save();
+
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully patched a contact!',
+      data: contact,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { getContacts, getContactById, createContact, patchContact };
