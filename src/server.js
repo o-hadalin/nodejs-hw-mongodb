@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import pino from 'pino-http';
 import dotenv from 'dotenv';
-import contactController from './controllers/contactController.js';
+import contactsRouter from './routers/contacts.js';
 
 dotenv.config();
 
@@ -12,10 +12,9 @@ const setupServer = () => {
 
   app.use(cors());
   app.use(pino());
+  app.use(express.json());
 
-  app.get('/contacts', contactController.getContacts);
-
-  app.get('/contacts/:contactId', contactController.getContactById);
+  app.use('/contacts', contactsRouter);
 
   app.get('/', (req, res) => {
     res.json({ message: 'Hello world!' });
