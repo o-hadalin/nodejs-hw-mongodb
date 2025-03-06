@@ -18,7 +18,22 @@ const getContactById = async (contactId) => {
   }
 };
 
+const deleteContactById = async (contactId) => {
+  try {
+    const contact = await Contact.findById(contactId);
+
+    if (!contact) {
+      throw new Error('Contact not found');
+    }
+
+    await Contact.findByIdAndDelete(contactId);
+  } catch (error) {
+    throw new Error(`Error deleting contact: ${error.message}`);
+  }
+};
+
 export default {
   getAllContacts,
   getContactById,
+  deleteContactById,
 };

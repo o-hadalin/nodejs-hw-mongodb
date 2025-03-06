@@ -88,4 +88,28 @@ const patchContact = async (req, res, next) => {
   }
 };
 
-export default { getContacts, getContactById, createContact, patchContact };
+const deleteContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+
+    const contact = await contactsService.getContactById(contactId);
+
+    if (!contact) {
+      return next(createError(404, 'Contact not found'));
+    }
+
+    await contactsService.deleteContactById(contactId);
+
+    res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default {
+  getContacts,
+  getContactById,
+  createContact,
+  patchContact,
+  deleteContact,
+};
