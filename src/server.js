@@ -25,11 +25,9 @@ const setupServer = () => {
   app.use('*', notFoundHandler);
   app.use(errorHandler);
 
-  const server = app.listen(PORT, () => {
+  app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
-
-  return server;
 };
 
 export default setupServer;
