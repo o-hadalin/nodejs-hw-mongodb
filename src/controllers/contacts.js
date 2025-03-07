@@ -5,7 +5,11 @@ import Contact from '../models/contact.js';
 const getContacts = async (req, res, next) => {
   try {
     const contacts = await contactsService.getAllContacts();
-    res.json(contacts);
+    res.json({
+      status: 200,
+      message: 'Successfully retrieved contacts',
+      data: contacts,
+    });
   } catch (err) {
     next(err);
   }
@@ -20,7 +24,11 @@ const getContactById = async (req, res, next) => {
       return next(createError(404, 'Contact not found'));
     }
 
-    res.json(contact);
+    res.json({
+      status: 200,
+      message: 'Successfully retrieved contact',
+      data: contact,
+    });
   } catch (err) {
     next(err);
   }
