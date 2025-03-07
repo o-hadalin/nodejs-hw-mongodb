@@ -1,35 +1,22 @@
 import Contact from '../models/contact.js';
+import createError from 'http-errors';
 
 const getAllContacts = async () => {
-  try {
-    const contacts = await Contact.find();
-    return contacts;
-  } catch (error) {
-    throw new Error(`Error fetching contacts: ${error.message}`);
-  }
+  return Contact.find();
 };
 
 const getContactById = async (contactId) => {
-  try {
-    const contact = await Contact.findById(contactId);
-    return contact;
-  } catch (error) {
-    throw new Error(`Error fetching contact: ${error.message}`);
-  }
+  return Contact.findById(contactId);
 };
 
 const deleteContactById = async (contactId) => {
-  try {
-    const contact = await Contact.findById(contactId);
+  const contact = await Contact.findById(contactId);
 
-    if (!contact) {
-      throw new Error('Contact not found');
-    }
-
-    await Contact.findByIdAndDelete(contactId);
-  } catch (error) {
-    throw new Error(`Error deleting contact: ${error.message}`);
+  if (!contact) {
+    throw createError(404, 'Contact not found');
   }
+
+  await Contact.findByIdAndDelete(contactId);
 };
 
 export default {
