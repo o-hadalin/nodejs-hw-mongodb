@@ -26,9 +26,10 @@ const contactSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   },
 );
 
-const Contact = mongoose.model('Contact', contactSchema, 'students');
+const Contact = mongoose.model('Contact', contactSchema);
 
 export default Contact;
