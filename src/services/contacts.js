@@ -1,5 +1,4 @@
 import Contact from '../models/contact.js';
-import createError from 'http-errors';
 
 const getAllContacts = async () => {
   return Contact.find();
@@ -9,18 +8,24 @@ const getContactById = async (contactId) => {
   return Contact.findById(contactId);
 };
 
+const createContact = async (contactData) => {
+  return Contact.create(contactData);
+};
+
+const updateContactById = async (contactId, updateData) => {
+  return Contact.findOneAndUpdate({ _id: contactId }, updateData, {
+    new: true,
+  });
+};
+
 const deleteContactById = async (contactId) => {
-  const contact = await Contact.findById(contactId);
-
-  if (!contact) {
-    throw createError(404, 'Contact not found');
-  }
-
-  await Contact.findByIdAndDelete(contactId);
+  return Contact.findByIdAndDelete(contactId);
 };
 
 export default {
   getAllContacts,
   getContactById,
+  createContact,
+  updateContactById,
   deleteContactById,
 };
