@@ -8,9 +8,12 @@ const contactSchema = Joi.object({
   contactType: Joi.string().valid('work', 'home', 'personal').required(),
 });
 
-const updateContactSchema = contactSchema.fork(
-  ['name', 'phoneNumber', 'contactType'],
-  (schema) => schema.optional(),
-);
+const updateContactSchema = Joi.object({
+  name: Joi.string().min(3).max(20),
+  phoneNumber: Joi.string().min(3).max(20),
+  email: Joi.string().email(),
+  isFavourite: Joi.boolean(),
+  contactType: Joi.string().valid('work', 'home', 'personal'),
+});
 
 export { contactSchema, updateContactSchema };
