@@ -2,25 +2,34 @@ import createError from 'http-errors';
 import contactsService from '../services/contacts.js';
 import parsePaginationParams from '../utils/parsePaginationParams.js';
 import calculatePaginationData from '../utils/calculatePaginationData.js';
+import parseSortParams from '../utils/parseSortParams.js';
 
 const getContacts = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
+  const { sortBy, sortOrder } = parseSortParams(req.query);
+
   const { contacts, totalItems } = await contactsService.getAllContacts(
     page,
     perPage,
+    sortBy,
+    sortOrder,
   );
 
   const message = contacts.length
     ? 'Successfully found contacts!'
     : 'No contacts found for the requested page';
 
+  const paginationData = calculatePaginationData({
+    page,
+    perPage,
+    totalItems,
+    data: contacts,
+  });
+
   res.json({
     status: 200,
     message,
-    data: {
-      data: contacts,
-      ...calculatePaginationData({ page, perPage, totalItems }),
-    },
+    data: paginationData,
   });
 };
 
