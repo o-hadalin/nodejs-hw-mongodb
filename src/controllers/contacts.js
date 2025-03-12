@@ -3,16 +3,19 @@ import contactsService from '../services/contacts.js';
 import parsePaginationParams from '../utils/parsePaginationParams.js';
 import calculatePaginationData from '../utils/calculatePaginationData.js';
 import parseSortParams from '../utils/parseSortParams.js';
+import parseFilterParams from '../utils/parseFilterParams.js';
 
 const getContacts = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
+  const filter = parseFilterParams(req.query);
 
   const { contacts, totalItems } = await contactsService.getAllContacts(
     page,
     perPage,
     sortBy,
     sortOrder,
+    filter,
   );
 
   const message = contacts.length
