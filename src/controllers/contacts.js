@@ -1,12 +1,26 @@
 import createError from 'http-errors';
 import contactsService from '../services/contacts.js';
+import parsePaginationParams from '../utils/parsePaginationParams.js';
+import calculatePaginationData from '../utils/calculatePaginationData.js';
 
 const getContacts = async (req, res) => {
-  const contacts = await contactsService.getAllContacts();
+  const { page, perPage } = parsePaginationParams(req.query);
+  const { contacts, totalItems } = await contactsService.getAllContacts(
+    page,
+    perPage,
+  );
+
+  const message = contacts.length
+    ? 'Successfully found contacts!'
+    : 'No contacts found for the requested page';
+
   res.json({
     status: 200,
-    message: 'Successfully retrieved contacts',
-    data: contacts,
+    message,
+    data: {
+      data: contacts,
+      ...calculatePaginationData({ page, perPage, totalItems }),
+    },
   });
 };
 
