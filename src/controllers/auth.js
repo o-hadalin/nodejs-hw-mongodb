@@ -1,6 +1,8 @@
 import createHttpError from 'http-errors';
 import authService from '../services/auth.js';
 
+const COOKIE_MAX_AGE = 30 * 24 * 60 * 60 * 1000;
+
 const register = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -22,4 +24,24 @@ const register = async (req, res) => {
   });
 };
 
-export default { register };
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  const { accessToken, refreshToken } = await authService.loginUser({
+    email,
+    password,
+  });
+
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: COOKIE_MAX_AGE,
+  });
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Successfully logged in a user!',
+    data: { accessToken },
+  });
+};
+
+export default { register, login };
