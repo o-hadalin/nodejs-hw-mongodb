@@ -18,4 +18,6 @@ router.post(
   ctrlWrapper(authController.login),
 );
 
+router.post('/refresh', ctrlWrapper(authController.refresh));
+
 export default router;

@@ -43,8 +43,31 @@ const loginUser = async ({ email, password }) => {
   return { accessToken, refreshToken };
 };
 
+const refreshSession = async (oldRefreshToken) => {
+  const session = await Session.findOne({ refreshToken: oldRefreshToken });
+  if (!session || new Date() > session.refreshTokenValidUntil) {
+    throw createHttpError(403, 'Invalid or expired refresh token');
+  }
+
+  await Session.deleteOne({ _id: session._id });
+
+  const accessToken = randomBytes(30).toString('base64');
+  const refreshToken = randomBytes(30).toString('base64');
+
+  await Session.create({
+    userId: session.userId,
+    accessToken,
+    refreshToken,
+    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+    refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAYS),
+  });
+
+  return { accessToken, refreshToken };
+};
+
 export default {
   findUserByEmail,
   createUser,
   loginUser,
+  refreshSession,
 };

@@ -44,4 +44,27 @@ const login = async (req, res) => {
   });
 };
 
-export default { register, login };
+const refresh = async (req, res) => {
+  const { refreshToken: oldRefreshToken } = req.cookies;
+  if (!oldRefreshToken) {
+    throw createHttpError(401, 'Refresh token missing');
+  }
+
+  const { accessToken, refreshToken } = await authService.refreshSession(
+    oldRefreshToken,
+  );
+
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: COOKIE_MAX_AGE,
+  });
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Successfully refreshed a session!',
+    data: { accessToken },
+  });
+};
+
+export default { register, login, refresh };
