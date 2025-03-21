@@ -67,4 +67,20 @@ const refresh = async (req, res) => {
   });
 };
 
-export default { register, login, refresh };
+const logout = async (req, res) => {
+  const { refreshToken } = req.cookies;
+  if (!refreshToken) {
+    throw createHttpError(401, 'Not authenticated');
+  }
+
+  await authService.logoutUser(refreshToken);
+
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+  });
+
+  res.status(204).send();
+};
+
+export default { register, login, refresh, logout };

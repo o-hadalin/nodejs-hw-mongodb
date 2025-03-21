@@ -65,9 +65,19 @@ const refreshSession = async (oldRefreshToken) => {
   return { accessToken, refreshToken };
 };
 
+const logoutUser = async (refreshToken) => {
+  const session = await Session.findOne({ refreshToken });
+  if (!session) {
+    throw createHttpError(403, 'Invalid refresh token');
+  }
+
+  await Session.deleteOne({ _id: session._id });
+};
+
 export default {
   findUserByEmail,
   createUser,
   loginUser,
   refreshSession,
+  logoutUser,
 };
