@@ -8,7 +8,7 @@ import parseFilterParams from '../utils/parseFilterParams.js';
 const getContacts = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
-  const filter = parseFilterParams(req.query);
+  const filter = { ...parseFilterParams(req.query), userId: req.user._id };
 
   const { contacts, totalItems } = await contactsService.getAllContacts(
     page,
@@ -38,7 +38,7 @@ const getContacts = async (req, res) => {
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await contactsService.getContactById(contactId);
+  const contact = await contactsService.getContactById(contactId, req.user._id);
 
   if (!contact) {
     throw createError(404, 'Contact not found');
@@ -52,7 +52,10 @@ const getContactById = async (req, res) => {
 };
 
 const createContact = async (req, res) => {
-  const newContact = await contactsService.createContact(req.body);
+  const newContact = await contactsService.createContact({
+    ...req.body,
+    userId: req.user._id,
+  });
 
   res.status(201).json({
     status: 201,
@@ -65,6 +68,7 @@ const patchContact = async (req, res) => {
   const { contactId } = req.params;
   const updatedContact = await contactsService.updateContactById(
     contactId,
+    req.user._id,
     req.body,
   );
 
@@ -81,7 +85,10 @@ const patchContact = async (req, res) => {
 
 const deleteContact = async (req, res) => {
   const { contactId } = req.params;
-  const deletedContact = await contactsService.deleteContactById(contactId);
+  const deletedContact = await contactsService.deleteContactById(
+    contactId,
+    req.user._id,
+  );
 
   if (!deletedContact) {
     throw createError(404, 'Contact not found');
