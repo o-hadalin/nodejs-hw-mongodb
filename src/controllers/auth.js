@@ -38,7 +38,7 @@ const login = async (req, res) => {
   });
 
   res.status(200).json({
-    status: 'success',
+    status: 200,
     message: 'Successfully logged in a user!',
     data: { accessToken },
   });
@@ -61,7 +61,7 @@ const refresh = async (req, res) => {
   });
 
   res.status(200).json({
-    status: 'success',
+    status: 200,
     message: 'Successfully refreshed a session!',
     data: { accessToken },
   });

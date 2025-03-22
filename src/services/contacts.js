@@ -31,14 +31,14 @@ const createContact = async (contactData) => {
   return Contact.create(contactData);
 };
 
-const updateContactById = async (contactId, updateData) => {
-  return Contact.findOneAndUpdate({ _id: contactId }, updateData, {
+const updateContactById = async (contactId, userId, updateData) => {
+  return Contact.findOneAndUpdate({ _id: contactId, userId }, updateData, {
     new: true,
   });
 };
 
-const deleteContactById = async (contactId) => {
-  return Contact.findByIdAndDelete(contactId);
+const deleteContactById = async (contactId, userId) => {
+  return Contact.findOneAndDelete({ _id: contactId, userId });
 };
 
 export default {
