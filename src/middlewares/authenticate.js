@@ -27,6 +27,7 @@ const authenticate = async (req, _res, next) => {
     }
 
     req.user = user;
+    console.log('Authenticated user:', req.user);
     next();
   } catch (error) {
     next(error);
