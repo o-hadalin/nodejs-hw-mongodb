@@ -1,9 +1,16 @@
 import Contact from '../models/contact.js';
 
-const getAllContacts = async (page, perPage, sortBy, sortOrder, filter) => {
+const getAllContacts = async (
+  userId,
+  page,
+  perPage,
+  sortBy,
+  sortOrder,
+  filter,
+) => {
   const { contactType, isFavourite } = filter;
 
-  const query = {};
+  const query = { userId };
   if (contactType) query.contactType = contactType;
   if (isFavourite !== null) query.isFavourite = isFavourite;
 
@@ -16,8 +23,8 @@ const getAllContacts = async (page, perPage, sortBy, sortOrder, filter) => {
   return { contacts, totalItems };
 };
 
-const getContactById = async (contactId) => {
-  return Contact.findById(contactId);
+const getContactById = async (contactId, userId) => {
+  return Contact.findOne({ _id: contactId, userId });
 };
 
 const createContact = async (contactData) => {
