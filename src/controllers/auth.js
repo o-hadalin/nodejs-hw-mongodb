@@ -114,4 +114,34 @@ const sendResetEmail = async (req, res) => {
   });
 };
 
-export default { register, login, refresh, logout, sendResetEmail };
+const resetPassword = async (req, res) => {
+  const { token, password } = req.body;
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findOne({ email: decoded.email });
+
+    if (!user) {
+      throw createHttpError(404, 'User not found!');
+    }
+
+    await authService.resetUserPassword(user, password);
+
+    res.status(200).json({
+      status: 200,
+      message: 'Password has been successfully reset.',
+      data: {},
+    });
+  } catch {
+    throw createHttpError(401, 'Token is expired or invalid.');
+  }
+};
+
+export default {
+  register,
+  login,
+  refresh,
+  logout,
+  sendResetEmail,
+  resetPassword,
+};
