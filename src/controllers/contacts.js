@@ -81,7 +81,7 @@ const createContact = async (req, res) => {
     message: 'Successfully created a contact!',
     data: {
       ...newContact,
-      photo: photoUrl ? { url: photoUrl } : null,
+      photo: photoUrl || null,
     },
   });
 };
@@ -133,7 +133,7 @@ const patchContact = async (req, res) => {
     message: 'Successfully updated a contact!',
     data: {
       ...updatedContact,
-      photo: photoUrl ? { url: photoUrl } : null,
+      photo: photoUrl || updatedContact.photo || null,
     },
   });
 };
