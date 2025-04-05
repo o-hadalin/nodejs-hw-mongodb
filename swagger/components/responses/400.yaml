@@ -2,9 +2,6 @@ description: Invalid request or bad input
 content:
   application/json:
     schema:
-      type: object
-      properties:
-        message:
-          type: string
+      $ref: '../schemas/ErrorResponseSchema.yaml'
     example:
       message: Invalid request parameters

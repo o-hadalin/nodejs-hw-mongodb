@@ -20,7 +20,11 @@ requestBody:
           - password
 responses:
   201:
-    $ref: '../../components/responses/201.yaml'
+    description: User created
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/UserSchema.yaml'
   400:
     $ref: '../../components/responses/400.yaml'
   409:

@@ -2,11 +2,7 @@ description: Unauthorized access
 content:
   application/json:
     schema:
-      type: object
-      properties:
-        status:
-          type: integer
-          example: 401
-        message:
-          type: string
-          example: 'Unauthorized'
+      $ref: '../schemas/ErrorResponseSchema.yaml'
+    example:
+      status: 401
+      message: Unauthorized

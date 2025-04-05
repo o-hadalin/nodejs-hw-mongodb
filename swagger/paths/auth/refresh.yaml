@@ -16,7 +16,11 @@ requestBody:
           - refreshToken
 responses:
   200:
-    $ref: '../../components/responses/200.yaml'
+    description: Tokens refreshed
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/AuthTokenSchema.yaml'
   400:
     $ref: '../../components/responses/400.yaml'
   401:

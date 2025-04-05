@@ -4,7 +4,11 @@ tags:
   - Auth
 responses:
   200:
-    $ref: '../../components/responses/200.yaml'
+    description: Successful session details
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/Session.yaml'
   400:
     $ref: '../../components/responses/400.yaml'
   401:

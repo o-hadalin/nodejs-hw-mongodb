@@ -1,3 +1,5 @@
+tags:
+  - Operations by ID
 operationId: updateContact
 summary: Update contact information by ID
 description: This endpoint allows you to update contact details by its unique ID.
@@ -17,8 +19,12 @@ requestBody:
       schema:
         $ref: '../../../components/schemas/Contact.yaml'
 responses:
-  '200':
-    $ref: '../../../components/responses/200.yaml'
+  200:
+    description: Retrieved user details
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/schemas/User.yaml'
   '400':
     $ref: '../../../components/responses/400.yaml'
   '404':

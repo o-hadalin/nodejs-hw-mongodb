@@ -1,18 +1,18 @@
 openapi: 3.1.0
 info:
   version: 1.0.0
-  title: Students app
+  title: Contacts app
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  description: This is a documentation of students app
+  description: This is a documentation of contacts app
 tags:
-  - name: Students
-    description: Operations about users.
   - name: Auth
     description: Auth operations.
   - name: Contacts
     description: Operations about contacts.
+  - name: Operations by ID
+    description: Operations for managing contacts using their unique ID.
 servers:
   - url: http://127.0.0.1:3000
   - url: https://students-base-2.onrender.com

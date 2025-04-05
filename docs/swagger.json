@@ -2,12 +2,12 @@
   "openapi": "3.1.0",
   "info": {
     "version": "1.0.0",
-    "title": "Students app",
+    "title": "Contacts app",
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "description": "This is a documentation of students app"
+    "description": "This is a documentation of contacts app"
   },
   "servers": [
     {
@@ -24,16 +24,16 @@
   ],
   "tags": [
     {
-      "name": "Students",
-      "description": "Operations about users."
-    },
-    {
       "name": "Auth",
       "description": "Auth operations."
     },
     {
       "name": "Contacts",
       "description": "Operations about contacts."
+    },
+    {
+      "name": "Operations by ID",
+      "description": "Operations for managing contacts using their unique ID."
     }
   ],
   "paths": {
@@ -118,6 +118,9 @@
     },
     "/contacts/{id}": {
       "get": {
+        "tags": [
+          "Operations by ID"
+        ],
         "operationId": "getContactById",
         "summary": "Retrieve a contact's full information by its unique identifier.",
         "description": "This endpoint allows you to get a contact by its unique ID.",
@@ -147,6 +150,9 @@
         }
       },
       "patch": {
+        "tags": [
+          "Operations by ID"
+        ],
         "operationId": "updateContact",
         "summary": "Update contact information by ID",
         "description": "This endpoint allows you to update contact details by its unique ID.",
@@ -178,7 +184,14 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/200"
+            "description": "Retrieved user details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/400"
@@ -189,6 +202,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "Operations by ID"
+        ],
         "operationId": "deleteContactById",
         "summary": "Delete a contact by ID",
         "description": "Delete a contact by its unique ID.",
@@ -251,7 +267,14 @@
         },
         "responses": {
           "201": {
-            "$ref": "#/components/responses/201"
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSchema"
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/400"
@@ -295,7 +318,14 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/200"
+            "description": "Successful login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseSchema"
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/400"
@@ -334,7 +364,14 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/200"
+            "description": "Tokens refreshed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthTokenSchema"
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/400"
@@ -354,7 +391,14 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/200"
+            "description": "Successful session details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/400"
@@ -511,12 +555,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
-                }
-              }
+              "$ref": "#/components/schemas/ErrorResponseSchema"
             },
             "example": {
               "message": "Invalid request parameters"
@@ -529,17 +568,11 @@
         "content": {
           "application/json": {
             "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "integer",
-                  "example": 401
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Unauthorized"
-                }
-              }
+              "$ref": "#/components/schemas/ErrorResponseSchema"
+            },
+            "example": {
+              "status": 401,
+              "message": "Unauthorized"
             }
           }
         }
@@ -616,6 +649,19 @@
       }
     },
     "schemas": {
+      "ErrorResponseSchema": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 401
+          },
+          "message": {
+            "type": "string",
+            "example": "Unauthorized"
+          }
+        }
+      },
       "Contact": {
         "type": "object",
         "properties": {
@@ -636,6 +682,103 @@
           "id",
           "name",
           "email"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email"
+        ]
+      },
+      "UserSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the user",
+            "example": "60c72b2f5f1b2c001c8e8e3e"
+          },
+          "name": {
+            "type": "string",
+            "description": "The user's name",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "description": "The user's email address",
+            "example": "johndoe@example.com"
+          }
+        }
+      },
+      "LoginResponseSchema": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "JWT access token for the user",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjBjNzJiMmY1ZjFiMmMwMDFjOGU4ZGUzZiIsImlhdCI6MTYyMjMwMjU3NywiZXhwIjoxNjIyMzA2MTM3fQ.PVg3zAYnN2vqkpJGbLJebHETK-3Z0dF3Vop5FOkxg_c"
+          }
+        }
+      },
+      "AuthTokenSchema": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "JWT access token for the user",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjBjNzJiMmY1ZjFiMmMwMDFjOGU4ZGUzZiIsImlhdCI6MTYyMjMwMjU3NywiZXhwIjoxNjIyMzA2MTM3fQ.PVg3zAYnN2vqkpJGbLJebHETK-3Z0dF3Vop5FOkxg_c"
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "Refresh token to generate new access tokens",
+            "example": "hxh2kjskdkd9d8d9d80sdj12ds89"
+          }
+        }
+      },
+      "Session": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          },
+          "accessTokenValidUntil": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "refreshTokenValidUntil": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "accessToken",
+          "refreshToken",
+          "accessTokenValidUntil",
+          "refreshTokenValidUntil"
         ]
       }
     }
