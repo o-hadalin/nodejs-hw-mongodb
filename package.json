@@ -1,14 +1,13 @@
 {
-  "name": "nodejs-hw5-auth",
+  "name": "hw7-swagger",
   "version": "1.0.0",
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/index.js",
-    "dev": "nodemon src/index.js",
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
     "build": "npm run build-docs",
-    "build-docs": "redocly bundle --ext json -o docs/swagger.json",
+    "build-docs": "redocly bundle docs/openapi.yaml --ext json -o docs/swagger.json",
     "preview-docs": "redocly preview-docs"
   },
   "keywords": [],

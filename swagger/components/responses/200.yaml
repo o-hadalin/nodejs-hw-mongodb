@@ -6,5 +6,11 @@ content:
       properties:
         data:
           type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
         message:
           type: string
+          example: 'Success'
