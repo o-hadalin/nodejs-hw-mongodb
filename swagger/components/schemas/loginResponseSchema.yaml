@@ -1,0 +1,6 @@
+type: object
+properties:
+  accessToken:
+    type: string
+    description: JWT access token for the user
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjBjNzJiMmY1ZjFiMmMwMDFjOGU4ZGUzZiIsImlhdCI6MTYyMjMwMjU3NywiZXhwIjoxNjIyMzA2MTM3fQ.PVg3zAYnN2vqkpJGbLJebHETK-3Z0dF3Vop5FOkxg_c'

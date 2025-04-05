@@ -1,4 +1,4 @@
-description: Unauthorized access
+description: Conflict — User already exists
 content:
   application/json:
     schema:
@@ -6,7 +6,7 @@ content:
       properties:
         status:
           type: integer
-          example: 401
+          example: 409
         message:
           type: string
-          example: 'Unauthorized'
+          example: 'User already exists'

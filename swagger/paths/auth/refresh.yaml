@@ -1,0 +1,23 @@
+summary: Refresh user JWT token
+operationId: refreshToken
+tags:
+  - Auth
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          refreshToken:
+            type: string
+            example: 'REFRESH-TOKEN-HERE'
+        required:
+          - refreshToken
+responses:
+  200:
+    $ref: '../../components/responses/200.yaml'
+  400:
+    $ref: '../../components/responses/400.yaml'
+  401:
+    $ref: '../../components/responses/401.yaml'

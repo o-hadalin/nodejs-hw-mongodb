@@ -1,4 +1,4 @@
-description: Unauthorized access
+description: Forbidden access
 content:
   application/json:
     schema:
@@ -6,7 +6,7 @@ content:
       properties:
         status:
           type: integer
-          example: 401
+          example: 403
         message:
           type: string
-          example: 'Unauthorized'
+          example: 'Forbidden'
