@@ -1,0 +1,29 @@
+tags:
+  - Contacts
+summary: Get a list of contacts
+operationId: getContacts
+description: Retrieve a list of contacts with optional filtering.
+security:
+  - bearerAuth: []
+parameters:
+  - name: limit
+    in: query
+    description: Number of contacts to retrieve
+    required: false
+    schema:
+      type: integer
+      default: 10
+  - name: offset
+    in: query
+    description: The offset for pagination
+    required: false
+    schema:
+      type: integer
+      default: 0
+responses:
+  '200':
+    $ref: '../../components/responses/200.yaml'
+  '400':
+    $ref: '../../components/responses/400.yaml'
+  '404':
+    $ref: '../../components/responses/404.yaml'

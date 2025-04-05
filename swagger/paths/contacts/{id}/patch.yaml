@@ -1,0 +1,25 @@
+operationId: updateContact
+summary: Update contact information by ID
+description: This endpoint allows you to update contact details by its unique ID.
+security:
+  - bearerAuth: []
+parameters:
+  - name: id
+    in: path
+    required: true
+    description: ID of the contact to update
+    schema:
+      type: string
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../../components/schemas/Contact.yaml'
+responses:
+  '200':
+    $ref: '../../../components/responses/200.yaml'
+  '400':
+    $ref: '../../../components/responses/400.yaml'
+  '404':
+    $ref: '../../../components/responses/404.yaml'

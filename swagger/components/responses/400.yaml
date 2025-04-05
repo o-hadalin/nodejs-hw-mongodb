@@ -1,0 +1,10 @@
+description: Invalid request or bad input
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+    example:
+      message: Invalid request parameters
