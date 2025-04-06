@@ -219,7 +219,8 @@
                 "type": "object",
                 "properties": {
                   "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "60f8e7e3e7c3a2b6f838b93e"
                   },
                   "name": {
                     "type": "string",
@@ -746,16 +747,20 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "example": "60f8e7e3e7c3a2b6f838b93e"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "example": "John Doe"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "example": "johndoe@example.com"
           },
           "phone": {
-            "type": "string"
+            "type": "string",
+            "example": "+1234567890"
           }
         },
         "required": [
@@ -813,24 +818,30 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "example": "60f8e7e3e7c3a2b6f838b93e"
           },
           "userId": {
-            "type": "string"
+            "type": "string",
+            "example": "60f8e7e3e7c3a2b6f838b93d"
           },
           "accessToken": {
-            "type": "string"
+            "type": "string",
+            "example": "abc123accessToken"
           },
           "refreshToken": {
-            "type": "string"
+            "type": "string",
+            "example": "xyz789refreshToken"
           },
           "accessTokenValidUntil": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "example": "2025-04-10T12:00:00Z"
           },
           "refreshTokenValidUntil": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "example": "2025-05-10T12:00:00Z"
           }
         },
         "required": [
