@@ -15,9 +15,13 @@ requestBody:
           password:
             type: string
             example: 'password123'
+          name:
+            type: string
+            example: 'Full Name'
         required:
           - email
           - password
+          - name
 responses:
   201:
     description: User created
