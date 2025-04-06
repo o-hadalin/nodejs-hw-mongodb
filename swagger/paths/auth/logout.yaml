@@ -2,6 +2,17 @@ summary: Logout a user
 operationId: logoutUser
 tags:
   - Auth
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          refreshToken:
+            type: string
+            description: Refresh token of the user to log out
+            example: 'REFRESH-TOKEN-HERE'
 responses:
   200:
     description: Successful session details

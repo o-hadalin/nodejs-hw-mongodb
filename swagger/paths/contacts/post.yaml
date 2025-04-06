@@ -10,7 +10,34 @@ requestBody:
   content:
     application/json:
       schema:
-        $ref: '../../components/schemas/Contact.yaml'
+        type: object
+        properties:
+          name:
+            type: string
+            description: Name of the contact
+          email:
+            type: string
+            description: Email address of the contact
+          phone:
+            type: string
+            description: Phone number of the contact
+          isFavourite:
+            type: boolean
+            description: Indicates if the contact is marked as favourite
+          contactType:
+            type: string
+            enum: ['work', 'home', 'personal']
+            description: Type of contact
+          photo:
+            type: string
+            description: URL of the photo (optional)
+      example:
+        name: 'John Doe'
+        email: 'john.doe@example.com'
+        phone: '+123456789'
+        isFavourite: false
+        contactType: 'work'
+        photo: 'https://example.com/photo.jpg'
 responses:
   '201':
     $ref: '../../components/responses/201.yaml'
