@@ -53,6 +53,4 @@ const setupServer = () => {
   });
 };
 
-setupServer();
-
 export default setupServer;

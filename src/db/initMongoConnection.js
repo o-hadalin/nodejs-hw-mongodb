@@ -1,37 +1,19 @@
-import express from 'express';
-import cors from 'cors';
-import pino from 'pino-http';
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import cookieParser from 'cookie-parser';
-import contactsRouter from './routers/contacts.js';
-import errorHandler from './middlewares/errorHandler.js';
-import notFoundHandler from './middlewares/notFoundHandler.js';
-import authRouter from './routers/auth.js';
 
 dotenv.config();
 
-const setupServer = () => {
-  const app = express();
-  const PORT = process.env.PORT || 3000;
+const initMongoConnection = async () => {
+  try {
+    const uri = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_URL}/${process.env.MONGODB_DB}?retryWrites=true&w=majority`;
 
-  app.use(cors());
-  app.use(pino());
-  app.use(express.json());
-  app.use(cookieParser());
+    await mongoose.connect(uri);
 
-  app.use('/contacts', contactsRouter);
-  app.use('/auth', authRouter);
-
-  app.get('/', (req, res) => {
-    res.json({ message: 'Hello world!' });
-  });
-
-  app.use('*', notFoundHandler);
-  app.use(errorHandler);
-
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
+    console.log('Mongo connection successfully established!');
+  } catch (error) {
+    console.error('Mongo connection error:', error.message);
+    process.exit(1);
+  }
 };
 
-export default setupServer;
+export default initMongoConnection;
