@@ -18,7 +18,7 @@ requestBody:
           email:
             type: string
             description: Email address of the contact
-          phone:
+          phoneNumber:
             type: string
             description: Phone number of the contact
           isFavourite:
@@ -34,7 +34,7 @@ requestBody:
       example:
         name: 'John Doe'
         email: 'john.doe@example.com'
-        phone: '+123456789'
+        phoneNumber: '+123456789'
         isFavourite: false
         contactType: 'work'
         photo: 'https://example.com/photo.jpg'

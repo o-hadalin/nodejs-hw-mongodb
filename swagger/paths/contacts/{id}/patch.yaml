@@ -29,7 +29,7 @@ requestBody:
             type: string
             format: email
             example: 'johndoe@example.com'
-          phone:
+          phoneNumber:
             type: string
             example: '+1234567890'
         required: []

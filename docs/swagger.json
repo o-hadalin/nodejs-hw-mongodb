@@ -111,7 +111,7 @@
                     "type": "string",
                     "description": "Email address of the contact"
                   },
-                  "phone": {
+                  "phoneNumber": {
                     "type": "string",
                     "description": "Phone number of the contact"
                   },
@@ -137,7 +137,7 @@
               "example": {
                 "name": "John Doe",
                 "email": "john.doe@example.com",
-                "phone": "+123456789",
+                "phoneNumber": "+123456789",
                 "isFavourite": false,
                 "contactType": "work",
                 "photo": "https://example.com/photo.jpg"
@@ -231,7 +231,7 @@
                     "format": "email",
                     "example": "johndoe@example.com"
                   },
-                  "phone": {
+                  "phoneNumber": {
                     "type": "string",
                     "example": "+1234567890"
                   }
@@ -758,7 +758,7 @@
             "type": "string",
             "example": "johndoe@example.com"
           },
-          "phone": {
+          "phoneNumber": {
             "type": "string",
             "example": "+1234567890"
           }
