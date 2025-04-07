@@ -14,6 +14,14 @@ parameters:
       type: string
 responses:
   '200':
-    $ref: '../../../components/responses/200.yaml'
+    description: Successfully retrieved the contact
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/schemas/Contact.yaml'
   '404':
     $ref: '../../../components/responses/404.yaml'
+  '400':
+    $ref: '../../../components/responses/400.yaml'
+  '401':
+    $ref: '../../../components/responses/401.yaml'
