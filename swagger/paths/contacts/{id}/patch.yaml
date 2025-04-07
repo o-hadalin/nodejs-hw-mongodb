@@ -1,5 +1,5 @@
 tags:
-  - Operations by ID
+  - Contacts
 operationId: updateContact
 summary: Update contact information by ID
 description: This endpoint allows you to update specific contact details by its unique ID.
