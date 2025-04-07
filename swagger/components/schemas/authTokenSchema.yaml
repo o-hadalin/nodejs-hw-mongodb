@@ -8,3 +8,7 @@ properties:
     type: string
     description: Refresh token to generate new access tokens
     example: 'hxh2kjskdkd9d8d9d80sdj12ds89'
+  message:
+    type: string
+    description: Message associated with the token response
+    example: 'Successfully logged in a user!'

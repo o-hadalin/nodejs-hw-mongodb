@@ -5,4 +5,4 @@ content:
       $ref: '../schemas/ErrorResponseSchema.yaml'
     example:
       status: 401
-      message: Unauthorized
+      message: Not authenticated

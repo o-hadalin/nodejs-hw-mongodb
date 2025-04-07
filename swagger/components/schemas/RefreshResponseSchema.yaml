@@ -1,0 +1,18 @@
+type: object
+properties:
+  status:
+    type: integer
+    example: 200
+  message:
+    type: string
+    example: 'Successfully refreshed a session!'
+  data:
+    type: object
+    properties:
+      accessToken:
+        type: string
+        example: 'kRvdeii1acPo2gCp06mMjNyDGyrw6pkd+OlOur8r'
+required:
+  - status
+  - message
+  - data

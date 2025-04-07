@@ -1,6 +1,21 @@
 type: object
 properties:
-  accessToken:
+  status:
+    type: integer
+    description: HTTP status code of the response
+    example: 200
+  message:
     type: string
-    description: JWT access token for the user
-    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjBjNzJiMmY1ZjFiMmMwMDFjOGU4ZGUzZiIsImlhdCI6MTYyMjMwMjU3NywiZXhwIjoxNjIyMzA2MTM3fQ.PVg3zAYnN2vqkpJGbLJebHETK-3Z0dF3Vop5FOkxg_c'
+    description: Message associated with the login response
+    example: 'Successfully logged in a user!'
+  data:
+    type: object
+    properties:
+      accessToken:
+        type: string
+        description: JWT access token for the user
+        example: 'n1IiOgOQDeYgt0GHLY/8yJu3Bin3WZHcVT+J+jFB'
+required:
+  - status
+  - message
+  - data

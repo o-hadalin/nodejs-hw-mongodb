@@ -6,3 +6,9 @@ properties:
   message:
     type: string
     example: 'Unauthorized'
+  data:
+    type: string
+    example: '"email" is required, "emai" is not allowed'
+required:
+  - status
+  - message

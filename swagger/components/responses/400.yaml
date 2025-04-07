@@ -4,4 +4,6 @@ content:
     schema:
       $ref: '../schemas/ErrorResponseSchema.yaml'
     example:
-      message: Invalid request parameters
+      status: 400
+      message: 'Something went wrong'
+      data: '"email" is required, "emai" is not allowed'

@@ -20,6 +20,10 @@ properties:
     type: string
     format: date-time
     example: '2025-05-10T12:00:00Z'
+  message:
+    type: string
+    description: Message associated with the session response
+    example: 'Session created successfully!'
 required:
   - id
   - userId

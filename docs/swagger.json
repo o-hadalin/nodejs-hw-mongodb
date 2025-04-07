@@ -345,7 +345,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserSchema"
+                  "$ref": "#/components/schemas/RegistrationResponseSchema"
                 }
               }
             }
@@ -412,90 +412,124 @@
     },
     "/auth/refresh": {
       "post": {
-        "summary": "Refresh user JWT token",
+        "summary": "Refresh the access token",
         "operationId": "refreshToken",
         "tags": [
           "Auth"
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "refreshToken": {
-                    "type": "string",
-                    "example": "REFRESH-TOKEN-HERE"
-                  }
-                },
-                "required": [
-                  "refreshToken"
-                ]
-              }
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "refreshToken",
+            "description": "The refresh token, which is passed through cookies, used to generate a new access token",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
-            "description": "Tokens refreshed",
+            "description": "New access token returned",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AuthTokenSchema"
+                  "$ref": "#/components/schemas/LoginResponseSchema"
+                },
+                "example": {
+                  "status": 200,
+                  "message": "Successfully refreshed a session!",
+                  "data": {
+                    "accessToken": "kRvdeii1acPo2gCp06mMjNyDGyrw6pkd+OlOur8r"
+                  }
                 }
               }
             }
           },
           "400": {
-            "$ref": "#/components/responses/400"
+            "description": "Bad request, e.g. missing or malformed refresh token cookie",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseSchema"
+                },
+                "example": {
+                  "status": 400,
+                  "message": "Invalid refresh token",
+                  "data": "Refresh token cookie is missing or malformed"
+                }
+              }
+            }
           },
           "401": {
-            "$ref": "#/components/responses/401"
+            "description": "Unauthorized, e.g. invalid or expired refresh token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseSchema"
+                },
+                "example": {
+                  "status": 401,
+                  "message": "Something went wrong",
+                  "data": "Refresh token is invalid or expired"
+                }
+              }
+            }
           }
         }
       }
     },
     "/auth/logout": {
       "post": {
-        "summary": "Logout a user",
+        "summary": "Log out the user",
         "operationId": "logoutUser",
         "tags": [
           "Auth"
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "refreshToken": {
-                    "type": "string",
-                    "description": "Refresh token of the user to log out",
-                    "example": "REFRESH-TOKEN-HERE"
-                  }
-                }
-              }
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "refreshToken",
+            "description": "The refresh token, passed through cookies, used to log out the user",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
-          "200": {
-            "description": "Successful session details",
+          "204": {
+            "description": "Successfully logged out, no content returned"
+          },
+          "400": {
+            "description": "Bad request, typically missing or invalid refresh token",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Session"
+                  "$ref": "#/components/schemas/ErrorResponseSchema"
+                },
+                "example": {
+                  "status": 400,
+                  "message": "Invalid refresh token",
+                  "data": "Refresh token cookie is missing or malformed"
                 }
               }
             }
           },
-          "400": {
-            "$ref": "#/components/responses/400"
-          },
           "401": {
-            "$ref": "#/components/responses/401"
+            "description": "Unauthorized, if no valid session exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseSchema"
+                },
+                "example": {
+                  "status": 401,
+                  "message": "Something went wrong",
+                  "data": "Not authenticated"
+                }
+              }
+            }
           }
         }
       }
@@ -528,13 +562,51 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/200"
+            "description": "Reset password email has been successfully sent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Reset password email has been successfully sent."
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/400"
           },
           "404": {
-            "$ref": "#/components/responses/404"
+            "description": "User with provided email was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseSchema"
+                },
+                "example": {
+                  "status": 404,
+                  "message": "Something went wrong",
+                  "data": "User not found!"
+                }
+              }
+            }
           }
         }
       }
@@ -542,7 +614,7 @@
     "/auth/reset-pwd": {
       "post": {
         "summary": "Reset user password",
-        "operationId": "resetPassword",
+        "operationId": "resetUserPassword",
         "tags": [
           "Auth"
         ],
@@ -553,18 +625,20 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "resetToken": {
+                  "token": {
                     "type": "string",
-                    "example": "RESET-TOKEN-HERE"
+                    "description": "JWT token received via email",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjBjNzJiMmY1ZjFiMmMwMDFjOGU4ZGUzZiIsImlhdCI6MTYyMjMwMjU3NywiZXhwIjoxNjIyMzA2MTM3fQ.PVg3zAYnN2vqkpJGbLJebHETK-3Z0dF3Vop5FOkxg_c"
                   },
-                  "newPassword": {
+                  "password": {
                     "type": "string",
-                    "example": "newpassword123"
+                    "description": "New password to set",
+                    "example": "17171717"
                   }
                 },
                 "required": [
-                  "resetToken",
-                  "newPassword"
+                  "token",
+                  "password"
                 ]
               }
             }
@@ -572,10 +646,51 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/200"
+            "description": "Password has been successfully reset",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Password has been successfully reset."
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "description": "Invalid or expired token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseSchema"
+                },
+                "example": {
+                  "status": 401,
+                  "message": "Something went wrong",
+                  "data": "Token is expired or invalid."
+                }
+              }
+            }
           },
           "404": {
             "$ref": "#/components/responses/404"
@@ -649,7 +764,9 @@
               "$ref": "#/components/schemas/ErrorResponseSchema"
             },
             "example": {
-              "message": "Invalid request parameters"
+              "status": 400,
+              "message": "Something went wrong",
+              "data": "\"email\" is required, \"emai\" is not allowed"
             }
           }
         }
@@ -663,7 +780,7 @@
             },
             "example": {
               "status": 401,
-              "message": "Unauthorized"
+              "message": "Not authenticated"
             }
           }
         }
@@ -707,21 +824,16 @@
         }
       },
       "409": {
-        "description": "Conflict — User already exists",
+        "description": "Conflict - user already exists",
         "content": {
           "application/json": {
             "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "integer",
-                  "example": 409
-                },
-                "message": {
-                  "type": "string",
-                  "example": "User already exists"
-                }
-              }
+              "$ref": "#/components/schemas/ErrorResponseSchema"
+            },
+            "example": {
+              "status": 409,
+              "message": "Something went wrong",
+              "data": "Email in use"
             }
           }
         }
@@ -824,8 +936,16 @@
           "message": {
             "type": "string",
             "example": "Unauthorized"
+          },
+          "data": {
+            "type": "string",
+            "example": "\"email\" is required, \"emai\" is not allowed"
           }
-        }
+        },
+        "required": [
+          "status",
+          "message"
+        ]
       },
       "Contact": {
         "type": "object",
@@ -853,88 +973,69 @@
           "email"
         ]
       },
-      "UserSchema": {
+      "RegistrationResponseSchema": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "description": "Unique identifier of the user",
-            "example": "60c72b2f5f1b2c001c8e8e3e"
+          "status": {
+            "type": "integer",
+            "example": 201
           },
-          "name": {
+          "message": {
             "type": "string",
-            "description": "The user's name",
-            "example": "John Doe"
+            "example": "Successfully registered a user!"
           },
-          "email": {
-            "type": "string",
-            "description": "The user's email address",
-            "example": "johndoe@example.com"
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "67f39f29e3c363521e0ae31d"
+              },
+              "name": {
+                "type": "string",
+                "example": "Ful Name"
+              },
+              "email": {
+                "type": "string",
+                "example": "e-mail@example.com"
+              }
+            }
           }
-        }
+        },
+        "required": [
+          "status",
+          "message",
+          "data"
+        ]
       },
       "LoginResponseSchema": {
         "type": "object",
         "properties": {
-          "accessToken": {
-            "type": "string",
-            "description": "JWT access token for the user",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjBjNzJiMmY1ZjFiMmMwMDFjOGU4ZGUzZiIsImlhdCI6MTYyMjMwMjU3NywiZXhwIjoxNjIyMzA2MTM3fQ.PVg3zAYnN2vqkpJGbLJebHETK-3Z0dF3Vop5FOkxg_c"
-          }
-        }
-      },
-      "AuthTokenSchema": {
-        "type": "object",
-        "properties": {
-          "accessToken": {
-            "type": "string",
-            "description": "JWT access token for the user",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjBjNzJiMmY1ZjFiMmMwMDFjOGU4ZGUzZiIsImlhdCI6MTYyMjMwMjU3NywiZXhwIjoxNjIyMzA2MTM3fQ.PVg3zAYnN2vqkpJGbLJebHETK-3Z0dF3Vop5FOkxg_c"
+          "status": {
+            "type": "integer",
+            "description": "HTTP status code of the response",
+            "example": 200
           },
-          "refreshToken": {
+          "message": {
             "type": "string",
-            "description": "Refresh token to generate new access tokens",
-            "example": "hxh2kjskdkd9d8d9d80sdj12ds89"
-          }
-        }
-      },
-      "Session": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "example": "60f8e7e3e7c3a2b6f838b93e"
+            "description": "Message associated with the login response",
+            "example": "Successfully logged in a user!"
           },
-          "userId": {
-            "type": "string",
-            "example": "60f8e7e3e7c3a2b6f838b93d"
-          },
-          "accessToken": {
-            "type": "string",
-            "example": "abc123accessToken"
-          },
-          "refreshToken": {
-            "type": "string",
-            "example": "xyz789refreshToken"
-          },
-          "accessTokenValidUntil": {
-            "type": "string",
-            "format": "date-time",
-            "example": "2025-04-10T12:00:00Z"
-          },
-          "refreshTokenValidUntil": {
-            "type": "string",
-            "format": "date-time",
-            "example": "2025-05-10T12:00:00Z"
+          "data": {
+            "type": "object",
+            "properties": {
+              "accessToken": {
+                "type": "string",
+                "description": "JWT access token for the user",
+                "example": "n1IiOgOQDeYgt0GHLY/8yJu3Bin3WZHcVT+J+jFB"
+              }
+            }
           }
         },
         "required": [
-          "id",
-          "userId",
-          "accessToken",
-          "refreshToken",
-          "accessTokenValidUntil",
-          "refreshTokenValidUntil"
+          "status",
+          "message",
+          "data"
         ]
       }
     }
