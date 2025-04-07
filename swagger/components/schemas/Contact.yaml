@@ -1,18 +1,45 @@
 type: object
 properties:
-  id:
+  _id:
     type: string
-    example: '60f8e7e3e7c3a2b6f838b93e'
+    example: '67f25d39e1935b9687129f29'
   name:
     type: string
     example: 'John Doe'
   email:
     type: string
-    example: 'johndoe@example.com'
+    example: 'john.doe@example.com'
   phoneNumber:
     type: string
-    example: '+1234567890'
+    example: '+123456789'
+  isFavourite:
+    type: boolean
+    example: false
+  contactType:
+    type: string
+    example: 'work'
+  userId:
+    type: string
+    example: '67f22a41875fd7d41ec03fd3'
+  photo:
+    type: string
+    format: binary
+    example: null
+  createdAt:
+    type: string
+    format: date-time
+    example: '2025-04-06T10:53:45.112Z'
+  updatedAt:
+    type: string
+    format: date-time
+    example: '2025-04-06T10:53:45.112Z'
 required:
-  - id
+  - _id
   - name
   - email
+  - phoneNumber
+  - isFavourite
+  - contactType
+  - userId
+  - createdAt
+  - updatedAt

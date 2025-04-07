@@ -49,3 +49,5 @@ responses:
           status: 404
           message: Something went wrong
           data: User not found!
+  500:
+    $ref: ../../components/responses/500.yaml

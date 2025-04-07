@@ -43,3 +43,5 @@ responses:
           status: 401
           message: 'Something went wrong'
           data: 'Refresh token is invalid or expired'
+  500:
+    $ref: ../../components/responses/500.yaml
