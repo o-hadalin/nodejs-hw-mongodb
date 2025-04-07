@@ -30,16 +30,14 @@
     {
       "name": "Contacts",
       "description": "Operations about contacts."
-    },
-    {
-      "name": "Contacts",
-      "description": "Operations for managing contacts using their unique ID."
     }
   ],
   "paths": {
     "/contacts": {
       "get": {
-        "tags": ["Contacts"],
+        "tags": [
+          "Contacts"
+        ],
         "summary": "Get a list of contacts",
         "operationId": "getContacts",
         "description": "Retrieve a list of contacts with optional filtering.",
@@ -50,24 +48,22 @@
         ],
         "parameters": [
           {
-            "name": "limit",
-            "in": "query",
-            "description": "Number of contacts to retrieve",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 10
-            }
+            "$ref": "#/components/parameters/page"
           },
           {
-            "name": "offset",
-            "in": "query",
-            "description": "The offset for pagination",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 0
-            }
+            "$ref": "#/components/parameters/perPage"
+          },
+          {
+            "$ref": "#/components/parameters/sortBy"
+          },
+          {
+            "$ref": "#/components/parameters/sortOrder"
+          },
+          {
+            "$ref": "#/components/parameters/type"
+          },
+          {
+            "$ref": "#/components/parameters/isFavourite"
           }
         ],
         "responses": {
@@ -77,13 +73,15 @@
           "400": {
             "$ref": "#/components/responses/400"
           },
-          "404": {
-            "$ref": "#/components/responses/404"
+          "401": {
+            "$ref": "#/components/responses/401"
           }
         }
       },
       "post": {
-        "tags": ["Contacts"],
+        "tags": [
+          "Contacts"
+        ],
         "summary": "Create a new contact",
         "operationId": "createContact",
         "description": "This endpoint allows you to create a new contact.",
@@ -95,44 +93,51 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "name",
+                  "email",
+                  "phoneNumber"
+                ],
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "Name of the contact"
+                    "description": "Name of the contact",
+                    "example": "John Doe"
                   },
                   "email": {
                     "type": "string",
-                    "description": "Email address of the contact"
+                    "description": "Email address of the contact",
+                    "example": "john.doe@example.com"
                   },
                   "phoneNumber": {
                     "type": "string",
-                    "description": "Phone number of the contact"
+                    "description": "Phone number of the contact",
+                    "example": "+123456789"
                   },
                   "isFavourite": {
                     "type": "boolean",
-                    "description": "Indicates if the contact is marked as favourite"
+                    "description": "Indicates if the contact is marked as favourite",
+                    "default": false
                   },
                   "contactType": {
                     "type": "string",
-                    "enum": ["work", "home", "personal"],
-                    "description": "Type of contact"
+                    "enum": [
+                      "work",
+                      "home",
+                      "personal"
+                    ],
+                    "description": "Type of contact",
+                    "example": "work"
                   },
                   "photo": {
                     "type": "string",
-                    "description": "URL of the photo (optional)"
+                    "format": "binary",
+                    "description": "Contact's photo (optional)"
                   }
                 }
-              },
-              "example": {
-                "name": "John Doe",
-                "email": "john.doe@example.com",
-                "phoneNumber": "+123456789",
-                "isFavourite": false,
-                "contactType": "work",
-                "photo": "https://example.com/photo.jpg"
               }
             }
           }
@@ -149,7 +154,9 @@
     },
     "/contacts/{id}": {
       "get": {
-        "tags": ["Contacts"],
+        "tags": [
+          "Contacts"
+        ],
         "operationId": "getContactById",
         "summary": "Retrieve a contact's full information by its unique identifier.",
         "description": "This endpoint allows you to get a contact by its unique ID.",
@@ -171,7 +178,20 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/200"
+            "description": "Successfully retrieved the contact",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contact"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
           },
           "404": {
             "$ref": "#/components/responses/404"
@@ -179,7 +199,9 @@
         }
       },
       "patch": {
-        "tags": ["Contacts"],
+        "tags": [
+          "Contacts"
+        ],
         "operationId": "updateContact",
         "summary": "Update contact information by ID",
         "description": "This endpoint allows you to update specific contact details by its unique ID.",
@@ -202,14 +224,10 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "id": {
-                    "type": "string",
-                    "example": "60f8e7e3e7c3a2b6f838b93e"
-                  },
                   "name": {
                     "type": "string",
                     "example": "John Doe"
@@ -222,9 +240,13 @@
                   "phoneNumber": {
                     "type": "string",
                     "example": "+1234567890"
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Contact's updated photo (optional)"
                   }
-                },
-                "required": []
+                }
               }
             }
           }
@@ -249,7 +271,9 @@
         }
       },
       "delete": {
-        "tags": ["Contacts"],
+        "tags": [
+          "Contacts"
+        ],
         "operationId": "deleteContactById",
         "summary": "Delete a contact by ID",
         "description": "Delete a contact by its unique ID.",
@@ -283,7 +307,9 @@
       "post": {
         "summary": "Register a new user",
         "operationId": "registerUser",
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -304,7 +330,11 @@
                     "example": "Full Name"
                   }
                 },
-                "required": ["email", "password", "name"]
+                "required": [
+                  "email",
+                  "password",
+                  "name"
+                ]
               }
             }
           }
@@ -333,7 +363,9 @@
       "post": {
         "summary": "Login a user",
         "operationId": "loginUser",
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -350,7 +382,10 @@
                     "example": "password123"
                   }
                 },
-                "required": ["email", "password"]
+                "required": [
+                  "email",
+                  "password"
+                ]
               }
             }
           }
@@ -379,7 +414,9 @@
       "post": {
         "summary": "Refresh user JWT token",
         "operationId": "refreshToken",
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -392,7 +429,9 @@
                     "example": "REFRESH-TOKEN-HERE"
                   }
                 },
-                "required": ["refreshToken"]
+                "required": [
+                  "refreshToken"
+                ]
               }
             }
           }
@@ -421,7 +460,9 @@
       "post": {
         "summary": "Logout a user",
         "operationId": "logoutUser",
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -463,7 +504,9 @@
       "post": {
         "summary": "Send password reset email",
         "operationId": "sendResetEmail",
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -476,7 +519,9 @@
                     "example": "user@example.com"
                   }
                 },
-                "required": ["email"]
+                "required": [
+                  "email"
+                ]
               }
             }
           }
@@ -498,7 +543,9 @@
       "post": {
         "summary": "Reset user password",
         "operationId": "resetPassword",
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -515,7 +562,10 @@
                     "example": "newpassword123"
                   }
                 },
-                "required": ["resetToken", "newPassword"]
+                "required": [
+                  "resetToken",
+                  "newPassword"
+                ]
               }
             }
           }
@@ -689,6 +739,80 @@
         "$ref": "#/components/responses/404"
       }
     },
+    "parameters": {
+      "page": {
+        "name": "page",
+        "in": "query",
+        "description": "Page number",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        }
+      },
+      "perPage": {
+        "name": "perPage",
+        "in": "query",
+        "description": "Number of items per page",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 10
+        }
+      },
+      "sortBy": {
+        "name": "sortBy",
+        "in": "query",
+        "description": "Sort field",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "name"
+          ],
+          "default": "name"
+        }
+      },
+      "sortOrder": {
+        "name": "sortOrder",
+        "in": "query",
+        "description": "Sort order",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "default": "asc"
+        }
+      },
+      "type": {
+        "name": "type",
+        "in": "query",
+        "description": "Contact type filter",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "work",
+            "home",
+            "personal"
+          ]
+        }
+      },
+      "isFavourite": {
+        "name": "isFavourite",
+        "in": "query",
+        "description": "Filter by favourite status",
+        "required": false,
+        "schema": {
+          "type": "boolean"
+        }
+      }
+    },
     "schemas": {
       "ErrorResponseSchema": {
         "type": "object",
@@ -723,7 +847,11 @@
             "example": "+1234567890"
           }
         },
-        "required": ["id", "name", "email"]
+        "required": [
+          "id",
+          "name",
+          "email"
+        ]
       },
       "UserSchema": {
         "type": "object",
